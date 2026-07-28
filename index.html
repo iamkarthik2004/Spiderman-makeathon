@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spider-Man: Brand New Day | Marvel</title>
+  <meta name="description" content="Spider-Man Brand New Day — Official Marvel promotional experience. Cinematic animations, premium interactions." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&family=Bangers&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/style.css" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js" defer></script>
+  <script src="https://unpkg.com/three@0.160.0/build/three.min.js" defer></script>
+  <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js" defer></script>
+</head>
+<body>
+
+  <!-- ==================== LOADING SCREEN ==================== -->
+  <div id="loader" class="loader">
+    <div class="loader__ring"></div>
+    <div class="loader__ring"></div>
+    <div class="loader__ring"></div>
+    <img src="assets/images/loader-logo.png" alt="Spider-Man" class="loader__logo" width="80" height="80" />
+    <p class="loader__text">LOADING<span class="loader__dots"></span></p>
+    <div class="loader__progress">
+      <div class="loader__bar"></div>
+    </div>
+  </div>
+
+  <!-- ==================== CUSTOM CURSOR ==================== -->
+  <div id="cursor" class="cursor">
+    <svg class="cursor__spider" viewBox="0 0 40 40" width="32" height="32">
+      <circle cx="20" cy="20" r="18" fill="#e23636" />
+      <ellipse cx="14" cy="15" rx="6" ry="7" fill="#1a1a2e" />
+      <ellipse cx="26" cy="15" rx="6" ry="7" fill="#1a1a2e" />
+      <path d="M6 8 Q2 2 0 0" stroke="#1a1a2e" stroke-width="1.2" fill="none" />
+      <path d="M34 8 Q38 2 40 0" stroke="#1a1a2e" stroke-width="1.2" fill="none" />
+      <path d="M4 18 Q-2 20 0 24" stroke="#1a1a2e" stroke-width="1.2" fill="none" />
+      <path d="M36 18 Q42 20 40 24" stroke="#1a1a2e" stroke-width="1.2" fill="none" />
+      <path d="M6 28 Q0 34 2 38" stroke="#1a1a2e" stroke-width="1.2" fill="none" />
+      <path d="M34 28 Q40 34 38 38" stroke="#1a1a2e" stroke-width="1.2" fill="none" />
+      <path d="M12 32 Q8 38 6 40" stroke="#1a1a2e" stroke-width="1.2" fill="none" />
+      <path d="M28 32 Q32 38 34 40" stroke="#1a1a2e" stroke-width="1.2" fill="none" />
+    </svg>
+    <div class="cursor__web-ring"></div>
+  </div>
+  <div id="cursor-trail" class="cursor-trail"></div>
+
+  <!-- ==================== WEB SHOT EFFECT ==================== -->
+  <svg id="web-shot" class="web-shot" viewBox="0 0 100 100" preserveAspectRatio="none">
+    <line id="web-shot-line" x1="0" y1="0" x2="0" y2="0" stroke="#fff" stroke-width="2" opacity="0" />
+  </svg>
+
+  <!-- ==================== NAVBAR ==================== -->
+  <nav id="navbar" class="navbar">
+    <div class="navbar__inner">
+      <a href="#hero" class="navbar__logo">
+        <img src="assets/images/loader-logo.png" alt="Spider-Man Logo" class="navbar__logo-img" />
+        <span class="navbar__brand">SPIDER-MAN</span>
+      </a>
+      <ul class="navbar__links">
+        <li><a href="#hero" class="navbar__link active" data-section="hero">Home</a></li>
+        <li><a href="#suits" class="navbar__link" data-section="suits">Suits</a></li>
+        <li><a href="#villains" class="navbar__link" data-section="villains">Villains</a></li>
+        <li><a href="#timeline" class="navbar__link" data-section="timeline">Timeline</a></li>
+        <li><a href="#gallery" class="navbar__link" data-section="gallery">Gallery</a></li>
+        <li><a href="#oscorp-lab" class="navbar__link" data-section="oscorp-lab">Oscorp Lab</a></li>
+        <li><a href="#contact" class="navbar__link" data-section="contact">Contact</a></li>
+      </ul>
+      <div class="navbar__actions">
+        <button id="sound-toggle" class="navbar__btn" title="Toggle Sound" aria-label="Toggle Sound">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M11 5L6 9H2v6h4l5 4V5z" />
+            <path class="sound-wave sound-wave--1" d="M15.54 8.46a5 5 0 010 7.07" />
+            <path class="sound-wave sound-wave--2" d="M19.07 4.93a10 10 0 010 14.14" />
+          </svg>
+        </button>
+        <button id="theme-toggle" class="navbar__btn" title="Toggle Day/Night" aria-label="Toggle Day/Night">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <path class="sun-ray" d="M12 3v1m0 16v1m8.66-15.66l-.71.71M4.05 19.95l-.71.71M21 12h-1M4 12H3m15.66 7.66l-.71-.71M4.05 4.05l-.71-.71" />
+            <circle cx="12" cy="12" r="5" />
+          </svg>
+        </button>
+        <button id="rain-toggle" class="navbar__btn" title="Toggle Rain" aria-label="Toggle Rain">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M16 13V5a4 4 0 00-8 0v8" />
+            <path d="M8 14a4 4 0 108 0" />
+            <line x1="12" y1="18" x2="12" y2="22" />
+            <line x1="8" y1="22" x2="16" y2="22" />
+          </svg>
+        </button>
+        <button id="menu-toggle" class="navbar__menu-btn" aria-label="Toggle Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== MOBILE MENU ==================== -->
+  <div id="mobile-menu" class="mobile-menu">
+    <ul class="mobile-menu__links">
+      <li><a href="#hero" class="mobile-menu__link">Home</a></li>
+      <li><a href="#suits" class="mobile-menu__link">Suits</a></li>
+      <li><a href="#villains" class="mobile-menu__link">Villains</a></li>
+      <li><a href="#timeline" class="mobile-menu__link">Timeline</a></li>
+      <li><a href="#gallery" class="mobile-menu__link">Gallery</a></li>
+      <li><a href="#oscorp-lab" class="mobile-menu__link">Oscorp Lab</a></li>
+      <li><a href="#contact" class="mobile-menu__link">Contact</a></li>
+    </ul>
+    <div class="mobile-menu__decoration">
+      <svg viewBox="0 0 200 200" width="150" height="150">
+        <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(226,54,54,0.3)" stroke-width="1" />
+        <path d="M100 10 L40 60 L10 100 L40 140 L100 190 L160 140 L190 100 L160 60Z" fill="none" stroke="rgba(226,54,54,0.15)" stroke-width="1" />
+      </svg>
+    </div>
+  </div>
+
+  <!-- ==================== HERO SECTION ==================== -->
+  <section id="hero" class="hero">
+    <div id="hero-canvas" class="hero__canvas"></div>
+
+    <div class="hero__bg-layers">
+      <div class="hero__image-wrap">
+        <img src="assets/images/hero/spiderman.png" alt="Spider-Man" class="hero__image" />
+        <div class="hero__image-glow"></div>
+        <div class="hero__image-overlay"></div>
+      </div>
+      <div class="hero__stars"></div>
+      <div class="hero__moon">
+        <div class="hero__moon-glow"></div>
+      </div>
+      <div class="hero__clouds">
+        <div class="hero__cloud hero__cloud--1"></div>
+        <div class="hero__cloud hero__cloud--2"></div>
+        <div class="hero__cloud hero__cloud--3"></div>
+      </div>
+      <div class="hero__skyline">
+        <svg class="hero__buildings" viewBox="0 0 1600 400" preserveAspectRatio="xMidYMax slice">
+          <defs>
+            <linearGradient id="buildingGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#2a2a4a" />
+              <stop offset="100%" stop-color="#0d0d1a" />
+            </linearGradient>
+          </defs>
+          <rect x="0" y="120" width="80" height="280" fill="url(#buildingGrad)" />
+          <rect x="85" y="80" width="60" height="320" fill="url(#buildingGrad)" />
+          <rect x="150" y="160" width="90" height="240" fill="url(#buildingGrad)" />
+          <rect x="245" y="60" width="70" height="340" fill="url(#buildingGrad)" />
+          <rect x="320" y="100" width="100" height="300" fill="url(#buildingGrad)" />
+          <rect x="425" y="50" width="80" height="350" fill="url(#buildingGrad)" />
+          <rect x="510" y="140" width="60" height="260" fill="url(#buildingGrad)" />
+          <rect x="575" y="70" width="90" height="330" fill="url(#buildingGrad)" />
+          <rect x="670" y="110" width="70" height="290" fill="url(#buildingGrad)" />
+          <rect x="745" y="40" width="100" height="360" fill="url(#buildingGrad)" />
+          <rect x="850" y="90" width="80" height="310" fill="url(#buildingGrad)" />
+          <rect x="935" y="130" width="60" height="270" fill="url(#buildingGrad)" />
+          <rect x="1000" y="55" width="90" height="345" fill="url(#buildingGrad)" />
+          <rect x="1095" y="100" width="70" height="300" fill="url(#buildingGrad)" />
+          <rect x="1170" y="75" width="100" height="325" fill="url(#buildingGrad)" />
+          <rect x="1275" y="120" width="80" height="280" fill="url(#buildingGrad)" />
+          <rect x="1360" y="60" width="60" height="340" fill="url(#buildingGrad)" />
+          <rect x="1425" y="95" width="90" height="305" fill="url(#buildingGrad)" />
+          <rect x="1520" y="110" width="80" height="290" fill="url(#buildingGrad)" />
+        </svg>
+      </div>
+      <div class="hero__spidey-container">
+        <div id="spiderman-swing" class="hero__spidey"></div>
+      </div>
+      <div id="web-particles" class="hero__web-particles"></div>
+      <div id="rain-container" class="hero__rain"></div>
+      <div id="lightning" class="hero__lightning"></div>
+    </div>
+
+    <div class="hero__content">
+      <div class="hero__marvel-badge">MARVEL STUDIOS PRESENTS</div>
+      <h1 class="hero__title">
+        <span class="hero__title-line hero__title-line--1" data-text="SPIDER-MAN">SPIDER-MAN</span>
+        <span class="hero__title-line hero__title-line--2" data-text="BRAND NEW DAY">BRAND NEW DAY</span>
+      </h1>
+      <p class="hero__subtitle">With great power comes great responsibility.</p>
+      <div class="hero__cta">
+        <a href="#suits" class="btn btn--primary">
+          <span class="btn__text">Explore</span>
+          <span class="btn__icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </span>
+        </a>
+        <a href="#gallery" class="btn btn--secondary">
+          <span class="btn__text">Watch Trailer</span>
+          <span class="btn__icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+          </span>
+        </a>
+      </div>
+      <div class="hero__scroll-indicator">
+        <div class="hero__scroll-line"></div>
+        <span>SCROLL</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SUITS SECTION ==================== -->
+  <section id="suits" class="section suits">
+    <div class="section__container">
+      <div class="section__header">
+        <span class="section__tag">EQUIPMENT</span>
+        <h2 class="section__title">SUIT <span class="text-gradient">SHOWCASE</span></h2>
+        <p class="section__desc">Advanced Stark-tech meets web-slinging genius.</p>
+      </div>
+      <div class="suits__grid">
+        <div class="suit-card" data-suit="classic">
+          <div class="suit-card__glow"></div>
+          <div class="suit-card__inner">
+            <div class="suit-card__front">
+              <div class="suit-card__image">
+                <img src="assets/images/suits/classic.png" alt="Classic Suit" class="suit-card__img" />
+                <div class="suit-card__eyes"></div>
+              </div>
+              <div class="suit-card__border"></div>
+            </div>
+            <div class="suit-card__back">
+              <h3 class="suit-card__name">Classic Suit</h3>
+              <p class="suit-card__info">The original red and blue. Enhanced with advanced Spider-sense amplification and adaptive nano-weave.</p>
+              <div class="suit-card__stats">
+                <div class="suit-stat">
+                  <span class="suit-stat__label">Defense</span>
+                  <div class="suit-stat__bar"><div class="suit-stat__fill" data-level="75"></div></div>
+                </div>
+                <div class="suit-stat">
+                  <span class="suit-stat__label">Agility</span>
+                  <div class="suit-stat__bar"><div class="suit-stat__fill" data-level="95"></div></div>
+                </div>
+                <div class="suit-stat">
+                  <span class="suit-stat__label">Web Power</span>
+                  <div class="suit-stat__bar"><div class="suit-stat__fill" data-level="85"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="suit-card" data-suit="iron-spider">
+          <div class="suit-card__glow"></div>
+          <div class="suit-card__inner">
+            <div class="suit-card__front">
+              <div class="suit-card__image">
+                <img src="assets/images/suits/iron-spider.png" alt="Iron Spider" class="suit-card__img" />
+                <div class="suit-card__eyes suit-card__eyes--gold"></div>
+              </div>
+              <div class="suit-card__border"></div>
+            </div>
+            <div class="suit-card__back">
+              <h3 class="suit-card__name">Iron Spider</h3>
+              <p class="suit-card__info">Tony Stark's masterpiece. Four mechanical arms, repulsor tech, and nanotechnology armor plating.</p>
+              <div class="suit-card__stats">
+                <div class="suit-stat">
+                  <span class="suit-stat__label">Defense</span>
+                  <div class="suit-stat__bar"><div class="suit-stat__fill" data-level="95"></div></div>
+                </div>
+                <div class="suit-stat">
+                  <span class="suit-stat__label">Agility</span>
+                  <div class="suit-stat__bar"><div class="suit-stat__fill" data-level="80"></div></div>
+                </div>
+                <div class="suit-stat">
+                  <span class="suit-stat__label">Web Power</span>
+                  <div class="suit-stat__bar"><div class="suit-stat__fill" data-level="100"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="suit-card" data-suit="symbiote">
+          <div class="suit-card__glow"></div>
+          <div class="suit-card__inner">
+            <div class="suit-card__front">
+              <div class="suit-card__image">
+                <img src="assets/images/suits/symbiote.png" alt="Symbiote Suit" class="suit-card__img" />
+                <div class="suit-card__eyes suit-card__eyes--white"></div>
+              </div>
+              <div class="suit-card__border"></div>
+            </div>
+            <div class="suit-card__back">
+              <h3 class="suit-card__name">Symbiote Suit</h3>
+              <p class="suit-card__info">The alien symbiote bond. Unmatched power, organic webbing, shape-shifting abilities at a moral cost.</p>
+              <div class="suit-card__stats">
+                <div class="suit-stat">
+                  <span class="suit-stat__label">Defense</span>
+                  <div class="suit-stat__bar"><div class="suit-stat__fill" data-level="90"></div></div>
+                </div>
+                <div class="suit-stat">
+                  <span class="suit-stat__label">Agility</span>
+                  <div class="suit-stat__bar"><div class="suit-stat__fill" data-level="100"></div></div>
+                </div>
+                <div class="suit-stat">
+                  <span class="suit-stat__label">Web Power</span>
+                  <div class="suit-stat__bar"><div class="suit-stat__fill" data-level="100"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="suit-card" data-suit="no-way-home">
+          <div class="suit-card__glow"></div>
+          <div class="suit-card__inner">
+            <div class="suit-card__front">
+              <div class="suit-card__image">
+                <img src="assets/images/suits/no-way-home.png" alt="No Way Home" class="suit-card__img" />
+                <div class="suit-card__eyes suit-card__eyes--blue"></div>
+              </div>
+              <div class="suit-card__border"></div>
+            </div>
+            <div class="suit-card__back">
+              <h3 class="suit-card__name">No Way Home</h3>
+              <p class="suit-card__info">Multiverse-touched final suit. Minimalist design with raw spider-powers and dimensional awareness.</p>
+              <div class="suit-card__stats">
+                <div class="suit-stat">
+                  <span class="suit-stat__label">Defense</span>
+                  <div class="suit-stat__bar"><div class="suit-stat__fill" data-level="70"></div></div>
+                </div>
+                <div class="suit-stat">
+                  <span class="suit-stat__label">Agility</span>
+                  <div class="suit-stat__bar"><div class="suit-stat__fill" data-level="90"></div></div>
+                </div>
+                <div class="suit-stat">
+                  <span class="suit-stat__label">Web Power</span>
+                  <div class="suit-stat__bar"><div class="suit-stat__fill" data-level="80"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== VILLAINS SECTION ==================== -->
+  <section id="villains" class="section villains">
+    <div class="section__container">
+      <div class="section__header">
+        <span class="section__tag">ROGUES GALLERY</span>
+        <h2 class="section__title">GREAT <span class="text-gradient text-gradient--red">ENEMIES</span></h2>
+        <p class="section__desc">Every hero is defined by their villains.</p>
+      </div>
+      <div class="villains__grid">
+        <!-- Green Goblin -->
+        <div class="villain-card" data-villain="green-goblin">
+          <div class="villain-card__bg"></div>
+          <div class="villain-card__glass"></div>
+          <div class="villain-card__poster">
+            <img src="assets/images/villians/golbin.png" alt="Green Goblin" class="villain-card__img" />
+            <div class="villain-card__overlay"></div>
+          </div>
+          <div class="villain-card__badge">
+            <span class="villain-card__badge-text">WANTED</span>
+          </div>
+          <div class="villain-card__info">
+            <div class="villain-card__top">
+              <h3 class="villain-card__name">Green Goblin</h3>
+              <span class="villain-card__alias">Norman Osborn</span>
+            </div>
+            <p class="villain-card__quote">"I'm a fan of you. Of your work."</p>
+            <div class="villain-card__stats">
+              <div class="villain-card__stat">
+                <span class="villain-card__stat-label">STR</span>
+                <div class="villain-card__bar"><div class="villain-card__bar-fill" style="width: 70%"></div></div>
+              </div>
+              <div class="villain-card__stat">
+                <span class="villain-card__stat-label">INT</span>
+                <div class="villain-card__bar"><div class="villain-card__bar-fill" style="width: 95%"></div></div>
+              </div>
+              <div class="villain-card__stat">
+                <span class="villain-card__stat-label">DNG</span>
+                <div class="villain-card__bar"><div class="villain-card__bar-fill" style="width: 85%"></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="villain-card__threat">THREAT LEVEL: <span>S</span></div>
+        </div>
+
+        <!-- Doc Ock -->
+        <div class="villain-card" data-villain="doc-ock">
+          <div class="villain-card__bg"></div>
+          <div class="villain-card__glass"></div>
+          <div class="villain-card__poster">
+            <img src="assets/images/villians/octopus.png" alt="Doctor Octopus" class="villain-card__img" />
+            <div class="villain-card__overlay"></div>
+          </div>
+          <div class="villain-card__badge">
+            <span class="villain-card__badge-text">ARRESTED</span>
+          </div>
+          <div class="villain-card__info">
+            <div class="villain-card__top">
+              <h3 class="villain-card__name">Doctor Octopus</h3>
+              <span class="villain-card__alias">Otto Octavius</span>
+            </div>
+            <p class="villain-card__quote">"The power of the sun in the palm of my hand."</p>
+            <div class="villain-card__stats">
+              <div class="villain-card__stat">
+                <span class="villain-card__stat-label">STR</span>
+                <div class="villain-card__bar"><div class="villain-card__bar-fill" style="width: 80%"></div></div>
+              </div>
+              <div class="villain-card__stat">
+                <span class="villain-card__stat-label">INT</span>
+                <div class="villain-card__bar"><div class="villain-card__bar-fill" style="width: 90%"></div></div>
+              </div>
+              <div class="villain-card__stat">
+                <span class="villain-card__stat-label">DNG</span>
+                <div class="villain-card__bar"><div class="villain-card__bar-fill" style="width: 90%"></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="villain-card__threat">THREAT LEVEL: <span>S</span></div>
+        </div>
+
+        <!-- Venom -->
+        <div class="villain-card" data-villain="venom">
+          <div class="villain-card__bg"></div>
+          <div class="villain-card__glass"></div>
+          <div class="villain-card__poster">
+            <img src="assets/images/villians/venom.png" alt="Venom" class="villain-card__img" />
+            <div class="villain-card__overlay"></div>
+          </div>
+          <div class="villain-card__badge villain-card__badge--dark">
+            <span class="villain-card__badge-text">LOOSE</span>
+          </div>
+          <div class="villain-card__info">
+            <div class="villain-card__top">
+              <h3 class="villain-card__name">Venom</h3>
+              <span class="villain-card__alias">Eddie Brock</span>
+            </div>
+            <p class="villain-card__quote">"We are Venom."</p>
+            <div class="villain-card__stats">
+              <div class="villain-card__stat">
+                <span class="villain-card__stat-label">STR</span>
+                <div class="villain-card__bar"><div class="villain-card__bar-fill" style="width: 95%"></div></div>
+              </div>
+              <div class="villain-card__stat">
+                <span class="villain-card__stat-label">INT</span>
+                <div class="villain-card__bar"><div class="villain-card__bar-fill" style="width: 65%"></div></div>
+              </div>
+              <div class="villain-card__stat">
+                <span class="villain-card__stat-label">DNG</span>
+                <div class="villain-card__bar"><div class="villain-card__bar-fill" style="width: 92%"></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="villain-card__threat">THREAT LEVEL: <span>A+</span></div>
+        </div>
+
+        <!-- Electro -->
+        <div class="villain-card" data-villain="electro">
+          <div class="villain-card__bg"></div>
+          <div class="villain-card__glass"></div>
+          <div class="villain-card__poster">
+            <img src="assets/images/villians/electro.png" alt="Electro" class="villain-card__img" />
+            <div class="villain-card__overlay"></div>
+          </div>
+          <div class="villain-card__badge villain-card__badge--electric">
+            <span class="villain-card__badge-text">ACTIVE</span>
+          </div>
+          <div class="villain-card__info">
+            <div class="villain-card__top">
+              <h3 class="villain-card__name">Electro</h3>
+              <span class="villain-card__alias">Max Dillon</span>
+            </div>
+            <p class="villain-card__quote">"I'm just an electrician."</p>
+            <div class="villain-card__stats">
+              <div class="villain-card__stat">
+                <span class="villain-card__stat-label">STR</span>
+                <div class="villain-card__bar"><div class="villain-card__bar-fill" style="width: 85%"></div></div>
+              </div>
+              <div class="villain-card__stat">
+                <span class="villain-card__stat-label">INT</span>
+                <div class="villain-card__bar"><div class="villain-card__bar-fill" style="width: 50%"></div></div>
+              </div>
+              <div class="villain-card__stat">
+                <span class="villain-card__stat-label">DNG</span>
+                <div class="villain-card__bar"><div class="villain-card__bar-fill" style="width: 88%"></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="villain-card__threat">THREAT LEVEL: <span>A</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== TIMELINE SECTION ==================== -->
+  <section id="timeline" class="section timeline">
+    <div class="section__container">
+      <div class="section__header">
+        <span class="section__tag">CHRONICLES</span>
+        <h2 class="section__title">WEB OF <span class="text-gradient">TIME</span></h2>
+        <p class="section__desc">The journey of your friendly neighborhood Spider-Man.</p>
+      </div>
+      <div class="timeline__track">
+        <div class="timeline__line">
+          <div class="timeline__line-fill"></div>
+        </div>
+        <div class="timeline__items">
+          <div class="timeline__item" data-year="2002">
+            <div class="timeline__dot"></div>
+            <div class="timeline__card glass-card">
+              <span class="timeline__year">2002</span>
+              <h3 class="timeline__event">Spider-Man</h3>
+              <p class="timeline__detail">Tobey Maguire swings onto screens. Sam Raimi redefines superhero cinema forever.</p>
+            </div>
+          </div>
+          <div class="timeline__item" data-year="2004">
+            <div class="timeline__dot"></div>
+            <div class="timeline__card glass-card">
+              <span class="timeline__year">2004</span>
+              <h3 class="timeline__event">Spider-Man 2</h3>
+              <p class="timeline__detail">Doc Ock arrives. Widely considered one of the greatest superhero films ever made.</p>
+            </div>
+          </div>
+          <div class="timeline__item" data-year="2012">
+            <div class="timeline__dot"></div>
+            <div class="timeline__card glass-card">
+              <span class="timeline__year">2012</span>
+              <h3 class="timeline__event">The Amazing Spider-Man</h3>
+              <p class="timeline__detail">Andrew Garfield takes the mantle. A darker, more grounded take on Peter Parker.</p>
+            </div>
+          </div>
+          <div class="timeline__item" data-year="2017">
+            <div class="timeline__dot"></div>
+            <div class="timeline__card glass-card">
+              <span class="timeline__year">2017</span>
+              <h3 class="timeline__event">Spider-Man: Homecoming</h3>
+              <p class="timeline__detail">Tom Holland joins the MCU. A coming-of-age story with Iron Man as mentor.</p>
+            </div>
+          </div>
+          <div class="timeline__item" data-year="2019">
+            <div class="timeline__dot"></div>
+            <div class="timeline__card glass-card">
+              <span class="timeline__year">2019</span>
+              <h3 class="timeline__event">Avengers: Endgame</h3>
+              <p class="timeline__detail">The Blip. Spidey returns alongside every hero in the biggest crossover event.</p>
+            </div>
+          </div>
+          <div class="timeline__item" data-year="2021">
+            <div class="timeline__dot"></div>
+            <div class="timeline__card glass-card">
+              <span class="timeline__year">2021</span>
+              <h3 class="timeline__event">No Way Home</h3>
+              <p class="timeline__detail">Three Spider-Men unite. The multiverse shatters and reality is forever changed.</p>
+            </div>
+          </div>
+          <div class="timeline__item" data-year="2026">
+            <div class="timeline__dot"></div>
+            <div class="timeline__card glass-card">
+              <span class="timeline__year">2026</span>
+              <h3 class="timeline__event">Brand New Day</h3>
+              <p class="timeline__detail">A new chapter begins. New threats, new allies, same responsibility.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== GALLERY SECTION ==================== -->
+  <section id="gallery" class="section gallery">
+    <div class="section__container">
+      <div class="section__header">
+        <span class="section__tag">VISUAL ARCHIVE</span>
+        <h2 class="section__title">COMIC <span class="text-gradient text-gradient--blue">GALLERY</span></h2>
+        <p class="section__desc">Moments frozen in time across the multiverse.</p>
+      </div>
+      <div class="gallery__grid">
+        <div class="gallery__item gallery__item--wide" data-caption="Web of Destiny">
+          <div class="gallery__flip">
+            <div class="gallery__face gallery__face--front">
+              <img src="assets/images/gallery/gallery1.png" alt="Web of Destiny" class="gallery__img" />
+            </div>
+            <div class="gallery__face gallery__face--back">
+              <p class="gallery__caption">"With great power comes great responsibility." — Uncle Ben</p>
+            </div>
+          </div>
+        </div>
+        <div class="gallery__item" data-caption="Rise">
+          <div class="gallery__flip">
+            <div class="gallery__face gallery__face--front">
+              <img src="assets/images/gallery/gallery2.png" alt="Rise" class="gallery__img" />
+            </div>
+            <div class="gallery__face gallery__face--back">
+              <p class="gallery__caption">"Sometimes you gotta lose to win."</p>
+            </div>
+          </div>
+        </div>
+        <div class="gallery__item" data-caption="Fall">
+          <div class="gallery__flip">
+            <div class="gallery__face gallery__face--front">
+              <img src="assets/images/gallery/gallery3.png" alt="Fall" class="gallery__img" />
+            </div>
+            <div class="gallery__face gallery__face--back">
+              <p class="gallery__caption">"I'm just a friendly neighborhood Spider-Man."</p>
+            </div>
+          </div>
+        </div>
+        <div class="gallery__item" data-caption="Alone">
+          <div class="gallery__flip">
+            <div class="gallery__face gallery__face--front">
+              <img src="assets/images/gallery/gallery4.png" alt="Alone" class="gallery__img" />
+            </div>
+            <div class="gallery__face gallery__face--back">
+              <p class="gallery__caption">"It's not about how I feel. It's about what's right."</p>
+            </div>
+          </div>
+        </div>
+        <div class="gallery__item" data-caption="United">
+          <div class="gallery__flip">
+            <div class="gallery__face gallery__face--front">
+              <img src="assets/images/gallery/gallery5.png" alt="United" class="gallery__img" />
+            </div>
+            <div class="gallery__face gallery__face--back">
+              <p class="gallery__caption">"We are the Spider-Verse."</p>
+            </div>
+          </div>
+        </div>
+        <div class="gallery__item gallery__item--wide" data-caption="Legacy">
+          <div class="gallery__flip">
+            <div class="gallery__face gallery__face--front">
+              <img src="assets/images/gallery/gallery6.png" alt="Legacy" class="gallery__img" />
+            </div>
+            <div class="gallery__face gallery__face--back">
+              <p class="gallery__caption">"Anyone can wear the mask."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== OSCORP LAB TERMINAL ==================== -->
+  <section id="oscorp-lab" class="section oscorp-lab">
+    <div class="section__container">
+      <div class="section__header">
+        <span class="section__tag">CLASSIFIED</span>
+        <h2 class="section__title">OSCORP <span class="text-gradient text-gradient--red">LAB</span></h2>
+        <p class="section__desc">Secure terminal access. Type <code>help</code> to see available commands.</p>
+      </div>
+      <div class="oscorp-terminal">
+        <div class="oscorp-terminal__header">
+          <div class="oscorp-terminal__dots">
+            <span class="oscorp-terminal__dot oscorp-terminal__dot--red"></span>
+            <span class="oscorp-terminal__dot oscorp-terminal__dot--yellow"></span>
+            <span class="oscorp-terminal__dot oscorp-terminal__dot--green"></span>
+          </div>
+          <span class="oscorp-terminal__title">OSCORP SECURE TERMINAL v3.7.1</span>
+          <div class="oscorp-terminal__status">
+            <span class="oscorp-terminal__status-dot"></span>
+            <span>ONLINE</span>
+          </div>
+        </div>
+        <div class="oscorp-terminal__screen">
+          <div class="oscorp-terminal__scanlines"></div>
+          <div class="oscorp-terminal__output" id="terminal-output"></div>
+          <div class="oscorp-terminal__input-line">
+            <span class="oscorp-terminal__prompt">oscorp@lab:~$</span>
+            <input type="text" class="oscorp-terminal__input" id="terminal-input" autocomplete="off" spellcheck="false" autofocus />
+            <span class="oscorp-terminal__cursor"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CONTACT SECTION ==================== -->
+  <section id="contact" class="section contact">
+    <div class="section__container">
+      <div class="section__header">
+        <span class="section__tag">GET IN TOUCH</span>
+        <h2 class="section__title">CONTACT <span class="text-gradient text-gradient--red">ME</span></h2>
+        <p class="section__desc">Have a project or want to collaborate? Let's connect.</p>
+      </div>
+      <div class="contact__grid">
+        <a href="https://github.com/iamkarthik2004" target="_blank" rel="noopener noreferrer" class="contact__card glass-card">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+          <span>GitHub</span>
+        </a>
+        <a href="https://www.linkedin.com/in/karthik-krishnan-775682251" target="_blank" rel="noopener noreferrer" class="contact__card glass-card">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          <span>LinkedIn</span>
+        </a>
+        <a href="https://www.instagram.com/karthik_kk708" target="_blank" rel="noopener noreferrer" class="contact__card glass-card">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          <span>Instagram</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer id="footer" class="footer">
+    <div class="footer__hanging-spider">
+      <div class="footer__web-string"></div>
+      <svg class="footer__spider-icon" viewBox="0 0 60 60" width="50" height="50">
+        <circle cx="30" cy="30" r="28" fill="#e23636" />
+        <ellipse cx="22" cy="24" rx="7" ry="8" fill="#1a1a2e" />
+        <ellipse cx="38" cy="24" rx="7" ry="8" fill="#1a1a2e" />
+        <circle cx="22" cy="23" r="3" fill="#fff" />
+        <circle cx="38" cy="23" r="3" fill="#fff" />
+        <path d="M8 14 Q3 6 2 0" stroke="#1a1a2e" stroke-width="1.5" fill="none" />
+        <path d="M52 14 Q57 6 58 0" stroke="#1a1a2e" stroke-width="1.5" fill="none" />
+        <path d="M6 30 Q-2 32 0 38" stroke="#1a1a2e" stroke-width="1.5" fill="none" />
+        <path d="M54 30 Q62 32 60 38" stroke="#1a1a2e" stroke-width="1.5" fill="none" />
+        <path d="M10 44 Q4 52 6 58" stroke="#1a1a2e" stroke-width="1.5" fill="none" />
+        <path d="M50 44 Q56 52 54 58" stroke="#1a1a2e" stroke-width="1.5" fill="none" />
+      </svg>
+    </div>
+    <div class="footer__web-overlay"></div>
+    <img src="assets/images/footer-net.png" alt="" class="footer__net" />
+    <div class="footer__inner">
+      <div class="footer__top">
+        <div class="footer__brand">
+          <h3 class="footer__title">SPIDER-MAN</h3>
+          <p class="footer__tagline">Your Friendly Neighborhood Hero</p>
+        </div>
+        <div class="footer__links">
+          <div class="footer__col">
+            <h4 class="footer__heading">Explore</h4>
+            <a href="#hero" class="footer__link">Home</a>
+            <a href="#suits" class="footer__link">Suits</a>
+            <a href="#villains" class="footer__link">Villains</a>
+          </div>
+          <div class="footer__col">
+            <h4 class="footer__heading">More</h4>
+            <a href="#timeline" class="footer__link">Timeline</a>
+            <a href="#gallery" class="footer__link">Gallery</a>
+          </div>
+          <div class="footer__col">
+            <h4 class="footer__heading">Connect</h4>
+            <a href="https://github.com/iamkarthik2004" target="_blank" rel="noopener noreferrer" class="footer__link">GitHub</a>
+            <a href="https://www.linkedin.com/in/karthik-krishnan-775682251" target="_blank" rel="noopener noreferrer" class="footer__link">LinkedIn</a>
+            <a href="https://www.instagram.com/karthik_kk708" target="_blank" rel="noopener noreferrer" class="footer__link">Instagram</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer__social">
+        <a href="https://github.com/iamkarthik2004" target="_blank" rel="noopener noreferrer" class="footer__social-link" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/karthik-krishnan-775682251" target="_blank" rel="noopener noreferrer" class="footer__social-link" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/karthik_kk708" target="_blank" rel="noopener noreferrer" class="footer__social-link" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        </a>
+      </div>
+      <div class="footer__bottom">
+        <p class="footer__credit">Website developed by <span class="footer__name">Karthik Krishnan</span></p>
+        <p>&copy; 2026 Spider-Man: Brand New Day. Fan project — Not affiliated with Marvel or Disney.</p>
+        <p class="footer__hint">Hint: Press "S" to swing. Try the Konami Code... &#x2191;&#x2191;&#x2193;&#x2193;&#x2190;&#x2192;&#x2190;&#x2192;BA</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== EASTER EGG TOAST ==================== -->
+  <div id="easter-egg-toast" class="toast">
+    <span class="toast__icon">&#x1F577;</span>
+    <span class="toast__text"></span>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
