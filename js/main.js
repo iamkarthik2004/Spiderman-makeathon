@@ -61,6 +61,7 @@
     initEasterEggs();
     initLightning();
     initOscorpTerminal();
+    initWebSwingNav();
   }
 
   /* ============================================================
@@ -82,6 +83,7 @@
 
     document.querySelectorAll('a[href^="#"]').forEach(function (a) {
       a.addEventListener('click', function (e) {
+        if (a.classList.contains('navbar__link') || a.classList.contains('mobile-menu__link')) return;
         e.preventDefault();
         var target = document.querySelector(a.getAttribute('href'));
         if (target) {
@@ -105,6 +107,7 @@
         clearInterval(interval);
         setTimeout(function () {
           document.getElementById('loader').classList.add('hidden');
+          document.getElementById('hero').classList.add('hero--loaded');
           animateHeroContent();
         }, 400);
       }
@@ -117,13 +120,65 @@
      ============================================================ */
   function animateHeroContent() {
     var tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-    tl.from('.hero__image', { opacity: 0, x: 80, scale: 0.95, duration: 1.4, ease: 'power2.out' }, 0)
-      .from('.hero__image-glow', { opacity: 0, scale: 0.5, duration: 1.2 }, 0.2)
-      .to('.hero__marvel-badge', { opacity: 1, y: 0, duration: 0.8 })
-      .to('.hero__title-line--1', { opacity: 1, y: 0, duration: 1 }, '-=0.3')
-      .to('.hero__title-line--2', { opacity: 1, y: 0, duration: 1 }, '-=0.5')
-      .to('.hero__subtitle', { opacity: 1, y: 0, duration: 0.8 }, '-=0.4')
-      .to('.hero__cta', { opacity: 1, y: 0, duration: 0.8 }, '-=0.3');
+
+    /* Spider-Man image slides in from right */
+    tl.from('.hero__image', { opacity: 0, x: 120, scale: 0.9, duration: 1.6, ease: 'power2.out' }, 0);
+
+    /* Marvel badge fades in */
+    tl.to('.hero__marvel-badge', { opacity: 1, y: 0, duration: 0.6 }, 0.5);
+
+    /* SPIDER-MAN split-letter entrance */
+    splitTextIntoSpans('.hero__title-line--1');
+    var letters1 = document.querySelectorAll('.hero__title-line--1 .char');
+    if (letters1.length) {
+      tl.from(letters1, {
+        opacity: 0,
+        y: 80,
+        rotateX: -90,
+        scale: 0.5,
+        duration: 0.8,
+        stagger: 0.04,
+        ease: 'back.out(1.7)',
+      }, 0.8);
+    } else {
+      tl.to('.hero__title-line--1', { opacity: 1, y: 0, duration: 1 }, 0.8);
+    }
+
+    /* BRAND NEW DAY entrance — slides up with glitch */
+    splitTextIntoSpans('.hero__title-line--2');
+    var letters2 = document.querySelectorAll('.hero__title-line--2 .char');
+    if (letters2.length) {
+      tl.from(letters2, {
+        opacity: 0,
+        y: 60,
+        x: -30,
+        scale: 0.7,
+        duration: 0.6,
+        stagger: 0.03,
+        ease: 'power4.out',
+      }, 1.4);
+    } else {
+      tl.to('.hero__title-line--2', { opacity: 1, y: 0, duration: 1 }, 1.4);
+    }
+
+    /* Subtitle + CTA */
+    tl.to('.hero__subtitle', { opacity: 1, y: 0, duration: 0.8 }, 2.0)
+      .to('.hero__cta', { opacity: 1, y: 0, duration: 0.8 }, 2.2)
+      .to('.hero__scroll-indicator', { opacity: 1, duration: 0.6 }, 2.5);
+  }
+
+  function splitTextIntoSpans(selector) {
+    var el = document.querySelector(selector);
+    if (!el || el.querySelector('.char')) return;
+    var text = el.textContent;
+    el.innerHTML = '';
+    for (var i = 0; i < text.length; i++) {
+      var span = document.createElement('span');
+      span.className = 'char';
+      span.textContent = text[i] === ' ' ? '\u00A0' : text[i];
+      span.style.display = 'inline-block';
+      el.appendChild(span);
+    }
   }
 
   /* ============================================================
@@ -720,6 +775,104 @@
       if (veins) veins.remove();
       gsap.fromTo(document.body, { filter: 'brightness(1.5) contrast(0.5)' }, { filter: 'brightness(1) contrast(1)', duration: 1, ease: 'power2.out' });
     }
+  }
+
+  /* ============================================================
+     WEB SWING NAVIGATION
+     ============================================================ */
+  function initWebSwingNav() {
+    var swingEl = document.getElementById('web-swing');
+    var swingLine = document.getElementById('web-swing-line');
+    var swingSpider = document.getElementById('web-swing-spider');
+    if (!swingEl || !swingLine || !swingSpider) return;
+
+    var lineEl = swingLine.querySelector('line');
+    var isSwinging = false;
+
+    document.querySelectorAll('.navbar__link, .mobile-menu__link').forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (isSwinging) return;
+
+        var href = link.getAttribute('href');
+        if (!href || !href.startsWith('#')) return;
+        var target = document.querySelector(href);
+        if (!target) return;
+
+        isSwinging = true;
+        closeMobileMenu();
+
+        var linkRect = link.getBoundingClientRect();
+        var startX = linkRect.left + linkRect.width / 2;
+        var startY = linkRect.bottom;
+
+        var targetTop = target.getBoundingClientRect().top + window.scrollY;
+        var endX = window.innerWidth / 2;
+        var endY = targetTop - window.scrollY + 100;
+
+        swingEl.classList.add('active');
+
+        lineEl.setAttribute('x1', startX);
+        lineEl.setAttribute('y1', startY - window.scrollY);
+        lineEl.setAttribute('x2', startX);
+        lineEl.setAttribute('y2', startY - window.scrollY);
+
+        gsap.set(swingSpider, { x: startX, y: startY, scale: 0.6, opacity: 0 });
+
+        var shootTl = gsap.timeline({
+          onComplete: function () {
+            gsap.to(swingEl, { opacity: 0, duration: 0.3, onComplete: function () {
+              swingEl.classList.remove('active');
+              gsap.set(swingEl, { opacity: 1 });
+              gsap.set(swingSpider, { opacity: 0 });
+              lineEl.setAttribute('x1', '0');
+              lineEl.setAttribute('y1', '0');
+              lineEl.setAttribute('x2', '0');
+              lineEl.setAttribute('y2', '0');
+            }});
+            isSwinging = false;
+          }
+        });
+
+        shootTl
+          .to(swingSpider, { opacity: 1, scale: 1, duration: 0.15, ease: 'power2.out' })
+          .to(lineEl, {
+            attr: { x2: endX, y2: endY - window.scrollY * 0.5 },
+            duration: 0.25,
+            ease: 'power2.out',
+          }, '<')
+          .to(swingSpider, {
+            x: endX,
+            y: endY,
+            rotation: -15,
+            duration: 0.4,
+            ease: 'power2.in',
+          }, 0.15)
+          .to({}, {
+            duration: 0.3,
+            onStart: function () {
+              lenis.scrollTo(target, { offset: -72, duration: 1.2 });
+            }
+          }, 0.1)
+          .to(swingSpider, {
+            y: '-=60',
+            rotation: 10,
+            duration: 0.3,
+            ease: 'power2.out',
+          }, 0.45)
+          .to(swingSpider, {
+            opacity: 0,
+            scale: 0.3,
+            duration: 0.25,
+            ease: 'power2.in',
+          }, 0.6)
+          .to(lineEl, {
+            attr: { y1: endY - window.scrollY * 0.5, y2: endY - window.scrollY * 0.5 },
+            opacity: 0,
+            duration: 0.3,
+          }, 0.55);
+      });
+    });
   }
 
   /* ============================================================

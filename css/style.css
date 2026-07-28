@@ -240,6 +240,37 @@ button { border: none; background: none; color: inherit; cursor: none; font: inh
 }
 
 /* ============================================================
+   WEB SWING NAVIGATION
+   ============================================================ */
+.web-swing {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.web-swing.active {
+  opacity: 1;
+}
+.web-swing__line {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.web-swing__spider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 0 10px rgba(226, 54, 54, 0.8));
+  z-index: 2;
+}
+
+/* ============================================================
    NAVBAR
    ============================================================ */
 .navbar {
@@ -506,16 +537,7 @@ button { border: none; background: none; color: inherit; cursor: none; font: inh
   z-index: 2;
 }
 .hero__image-glow {
-  position: absolute;
-  bottom: 5%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90%;
-  height: 70%;
-  background: radial-gradient(ellipse at center bottom, rgba(226, 54, 54, 0.3), transparent 60%);
-  filter: blur(50px);
-  z-index: 1;
-  animation: heroGlowPulse 4s ease-in-out infinite alternate;
+  display: none;
 }
 .hero__image-overlay {
   position: absolute;
@@ -539,7 +561,7 @@ button { border: none; background: none; color: inherit; cursor: none; font: inh
 .hero__moon {
   position: absolute;
   top: 8%;
-  right: 15%;
+  right: 8%;
   width: 100px;
   height: 100px;
   border-radius: 50%;
@@ -729,6 +751,16 @@ button { border: none; background: none; color: inherit; cursor: none; font: inh
   align-items: center;
   justify-content: center;
 }
+.hero--loaded .hero__content {
+  opacity: 1;
+}
+.hero--loaded .hero__title-line {
+  opacity: 1;
+  transform: none;
+}
+.hero--loaded .hero__title-line .char {
+  opacity: 1;
+}
 .hero::after {
   content: '';
   position: absolute;
@@ -758,6 +790,10 @@ button { border: none; background: none; color: inherit; cursor: none; font: inh
   letter-spacing: 12px;
   opacity: 0;
   transform: translateY(40px);
+}
+.hero__title-line .char {
+  display: inline-block;
+  opacity: 0;
 }
 .hero__title-line--1 {
   font-size: clamp(3rem, 10vw, 8rem);
@@ -855,7 +891,6 @@ button { border: none; background: none; color: inherit; cursor: none; font: inh
   align-items: center;
   gap: 8px;
   opacity: 0;
-  animation: fadeInUp 1s 2.5s forwards;
 }
 .hero__scroll-indicator span {
   font-size: 0.65rem;
@@ -1596,10 +1631,10 @@ button { border: none; background: none; color: inherit; cursor: none; font: inh
   width: 110%;
   height: 110%;
   object-fit: cover;
-  opacity: 0.08;
+  opacity: 0.04;
   pointer-events: none;
   z-index: 0;
-  filter: drop-shadow(0 0 30px rgba(226, 54, 54, 0.3));
+  filter: brightness(0) invert(1) opacity(0.3);
   animation: footerNetFloat 8s ease-in-out infinite;
 }
 @keyframes footerNetFloat {
@@ -1830,7 +1865,7 @@ body.symbiote-mode .symbiote-veins {
 
   .footer__top { flex-direction: column; align-items: center; text-align: center; }
   .footer__links { gap: 40px; }
-  .footer__net { width: 130%; height: 130%; opacity: 0.06; }
+  .footer__net { width: 130%; height: 130%; opacity: 0.03; }
 }
 @media (max-width: 600px) {
   .section { padding: 80px 0; }
@@ -1845,7 +1880,7 @@ body.symbiote-mode .symbiote-veins {
   .hero__title-line--1 { letter-spacing: 6px; }
   .hero__title-line--2 { letter-spacing: 4px; }
   .footer__links { flex-direction: column; gap: 24px; }
-  .footer__net { width: 150%; height: 150%; opacity: 0.05; }
+  .footer__net { width: 150%; height: 150%; opacity: 0.025; }
   .navbar__brand { display: none; }
 }
 
@@ -1882,9 +1917,6 @@ body.symbiote-mode .symbiote-veins {
   background: linear-gradient(to top, #f0f0f8 0%, transparent 30%),
               linear-gradient(to right, #f0f0f8 0%, transparent 40%);
 }
-[data-theme="light"] .hero__image-glow {
-  background: radial-gradient(ellipse at center bottom, rgba(226, 54, 54, 0.15), transparent 65%);
-}
 [data-theme="light"] .contact { background: linear-gradient(180deg, #f0f0f8, #e8e8f0, #f0f0f8); }
 [data-theme="light"] .footer__social-link {
   background: #e0e0e8;
@@ -1895,8 +1927,8 @@ body.symbiote-mode .symbiote-veins {
   color: #fff;
 }
 [data-theme="light"] .footer__net {
-  opacity: 0.04;
-  filter: drop-shadow(0 0 15px rgba(226, 54, 54, 0.2));
+  opacity: 0.03;
+  filter: brightness(0) invert(1) opacity(0.2);
 }
 
 /* ============================================================
