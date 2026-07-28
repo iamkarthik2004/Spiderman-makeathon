@@ -144,12 +144,6 @@ No build tools or dependencies required — everything runs from CDN links.
 
 ---
 
-## Author
-
-**Karthik Krishnan** — [GitHub](https://github.com/iamkarthik2004) · [LinkedIn](https://www.linkedin.com/in/karthik-krishnan-775682251) · [Instagram](https://www.instagram.com/karthik_kk708)
-
----
-
 ## Disclaimer
 
 Fan project — not affiliated with Marvel or Disney.
