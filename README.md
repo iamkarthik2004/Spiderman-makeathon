@@ -81,7 +81,6 @@ A cinematic, interactive fan-made promotional experience for Spider-Man: Brand N
 - **CSS3** — Custom properties, Grid, Flexbox, animations, glassmorphism
 - **JavaScript (ES5+)** — Vanilla, no frameworks
 - **GSAP 3.12** — Animations, ScrollTrigger, ScrollToPlugin
-- **Three.js 0.160** — 3D particle background
 - **Lenis 1.0** — Smooth scrolling
 - **Google Fonts** — Bebas Neue, Orbitron, Inter, Bangers
 
