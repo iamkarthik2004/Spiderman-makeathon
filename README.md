@@ -2,7 +2,7 @@
 
 A cinematic, interactive fan-made promotional experience for Spider-Man: Brand New Day. Built with vanilla HTML, CSS, and JavaScript with GSAP, Three.js, and Lenis smooth scrolling.
 
-**Live Demo:** [View Site](https://iamkarthik2004.github.io/Spiderman-makeathon/)
+**Live Demo:** [View Site](https://spiderman-makeathon.vercel.app/)
 
 ![Spider-Man: Brand New Day](assets/images/hero/spiderman.png)
 
